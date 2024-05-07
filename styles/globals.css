@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  /* color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb)); */
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+.log_in{
+  background-image: url(/image3.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100vh;
+}
+
+.register{
+  background-image: url(/image3.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.forget_password{
+  background-image: url(/image3.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100vh;
+}
+
+.circle{
+  height: 70vh;
+  width: 70vh;
+  border-radius: 50%;
+}
+
+.user-image {
+  width: 50px; /* Your desired width */
+  height: 50px; /* Your desired height */
+  object-fit: cover; /* Maintain aspect ratio */
+  border-radius: 50%; /* For rounded corners */
+}
+.bg{
+  background-image: url(/developing.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.lfooter {
+  /* background-image: url(/developing.jpg); */
+  /* background-size: cover;
+  background-attachment: fixed;
+  background-position: center; */
+  background-image: linear-gradient( 100.4deg, rgba(255,255,255,1) 3.1%, rgba(19,41,75,0.26) 118.3% );
+
+}
+.rfooter{
+  background-image: linear-gradient( 79.6deg, rgba(19,41,75,0.26) 3.1%, rgba(255,255,255,1) 118.3% );
+
+}
+
+/* .team{
+  background-image: url(/team.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+} */
+
+@media screen and (max-width: 600px) {
+  .circle{
+      height: 60vh;
+      width: 60vh;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  height: auto;
+}
+
+.head {
+  background: rgb(186, 211, 225) url(/frontimage1.jpg);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: black;
+}
+
+/* login */
+/* .log_in{
+  background-image: url(/image3.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 90vh;
+} */
+
+/* .career::after{
+  content: "";
+  width: 100px;
+  color: red;
+  border: 10px solid;
+  display: block;
+  margin: auto;
+} */
+
+
+
+
+.contact-img{
+  background: rgb(137, 193, 249) url(/contact1.jpg);
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: black;
+}
+
+/* Client project page*/
+.project-div{
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .project-div{
+      width: 45%;
+  }
+  
+}
+
+
+/* @media (min-width: 1025px) {
+  .project-div{
+      width: 0%;
+  }
+} */
+
+input[type='text']{
+  color: black;
+  text-align: left;
+  padding: 5px 10px;
+  outline: none;
+}
+
+p{
+  text-align: justify;
+}
+
+.card-hover{
+  background-image: linear-gradient(108deg, #aff4f6 22%, #aff4f6aa);
+  cursor: pointer;
+}
+
+form>label{
+  display: inline-block;
+  width: 23%;
+}
+form>input, form>select, form>textarea{
+  width: 75%;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 500px) {
+  form>label{
+    display: block;
+    width: 100%;
+  }
+  form>input, form>select, form>textarea{
+    width: 100%;
+  } 
+}
