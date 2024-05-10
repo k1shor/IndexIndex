@@ -16,6 +16,7 @@ export const sendEmail = (user)=> {
 
 
 export const sendMessage = (user)=> {
+    let API = "http://localhost:8000/api"
     return fetch(`${API}/submit_normaluserdetails`,{
         method: "POST",
         headers:{

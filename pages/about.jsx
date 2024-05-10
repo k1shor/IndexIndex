@@ -17,8 +17,20 @@ if (typeof window !== 'undefined') {
 }
 const API = "https://api.indexithub.com/api"
 
-const about = () => {
-  let [users, setUsers] = useState([])
+export async function getStaticProps(){
+
+  const users = await alluserclient()
+
+  // const res = await alluserclient()
+  // const users = JSON.stringify(res);
+  return {props: { users } }
+
+}
+
+const about = (props) => {
+  // let [users, setUsers] = useState([])
+console.log(props)
+  let {users} = props
 
 
 
@@ -39,18 +51,19 @@ const about = () => {
     }
   }
 
-  useEffect(() => {
-    Aos.init()
-    alluserclient()
-      .then(data => {
-        if (data?.error) {
-          console.log(data.error)
-        }
-        else {
-          setUsers(data)
-        }
-      })
-  }, [])
+  // useEffect(() => {
+  //   Aos.init()
+  //   alluserclient()
+  //     .then(data => {
+  //       if (data?.error) {
+  //         console.log(data.error)
+  //       }
+  //       else {
+  //         setUsers(data)
+  //       }
+  //     })
+  // }, [])
+
   return (
     <div className='lfooter'>
       <div className='contact-img text-center p-16 '>

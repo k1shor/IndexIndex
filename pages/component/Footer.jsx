@@ -19,19 +19,25 @@ const Footer = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    sendEmail(email)
-      .then(data => {
-        if (data.error) {
-          setSuccess(false)
-          setError(data.error)
-        }
-        else {
-          setError('')
-          setSuccess(true)
-          setEmail("")
-        }
-      })
-      .catch(error => console.log(error))
+    if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+      {
+        setError("Invalid Email")
+      }
+      else {
+        sendEmail(email)
+        .then(data => {
+          if (data.error) {
+            setSuccess(false)
+            setError(data.error)
+          }
+          else {
+            setError('')
+            setSuccess(true)
+            setEmail("")
+          }
+        })
+        .catch(error => console.log(error))
+      }
   }
 
   const showError = () => {

@@ -83,6 +83,7 @@ export const alluser = (token) =>{
 
 // client side user view
 export const alluserclient = () =>{
+    let API = "http://localhost:8000/api"
     return fetch(`${API}/user/userlistclient`)
     .then(response =>{return response.json()})
     .catch(error => console.log(error))

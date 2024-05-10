@@ -28,24 +28,61 @@ const contact = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    sendMessage(formData)
-      .then(data => {
-        if (data.error) {
-          setSuccess(false)
-          console.log(data.error)
-          setError(data.error)
-        }
-        else {
-          setError('')
-          setSuccess(true)
-          setFormData({
-            name: "",
-            email: "",
-            message: ""
+    // validation 
+    if(!name){
+      setError("Please fill in your name.")
+      // return; // Return early if validation fails
+    }
+    else if(name.length < 2){
+      setError("Name should be more than 2 characters.")
+      // return; // Return early if validation fails
+    }
+
+    else if(!email){
+      setError("Please fill in your email.")
+      // return; // Return early if validation fails
+    }
+    else if(!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+    {
+      setError("Invalid Email")
+      // return; // Return early if validation fails
+    }
+    
+    else if(!message){
+      setError("Please fill in your message.")
+      // return; // Return early if validation fails
+    }
+    else if(message.length < 10){
+      setError("Message should be more than 10 characters.")
+      // return; // Return early if validation fails
+    }
+
+    // if (!formData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+    // {
+    //   setError("Invalid Email")
+      
+    // }
+      else {
+
+        sendMessage(formData)
+          .then(data => {
+            if (data.error) {
+              setSuccess(false)
+              console.log(data.error)
+              setError(data.error)
+            }
+            else {
+              setError('')
+              setSuccess(true)
+              setFormData({
+                name: "",
+                email: "",
+                message: ""
+              })
+            }
           })
-        }
-      })
-      .catch(error => console.log(error))
+          .catch(error => console.log(error))
+      }
   }
 
   const showError = () => {
@@ -54,7 +91,7 @@ const contact = () => {
             icon: "error",
             toast: true,
             title: "error",
-            text: "Fill the Required Field",
+            text: error,
             position: "top-end",
             showConfirmButton: false,
             timer: 3000,

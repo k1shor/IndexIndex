@@ -6,24 +6,32 @@ import { useEffect } from "react";
 import Link from 'next/link';
 import { getAllCategories } from '../api/categoryAPI';
 
+export async function getStaticProps() {
+    const services = await getAllCategories()
+    console.log(services)
 
-const Services = () => {
-    let [services, setServices] = useState([])
-    let [success, setSuccess] = useState(false)
+    return {props: {services}}
+}
 
-    useEffect(() => {
-        Aos.init()
-        getAllCategories()
-            .then(data => {
-                if (data?.error) {
-                    console.log(data.error)
-                }
-                else {
-                    console.log(data)
-                    setServices(data)
-                }
-            })
-    }, [success])
+const Services = (props) => {
+    // let [services, setServices] = useState([])
+    // let [success, setSuccess] = useState(false)
+
+    let { services } = props
+
+    // useEffect(() => {
+    //     Aos.init()
+    //     getAllCategories()
+    //         .then(data => {
+    //             if (data?.error) {
+    //                 console.log(data.error)
+    //             }
+    //             else {
+    //                 console.log(data)
+    //                 setServices(data)
+    //             }
+    //         })
+    // }, [success])
 
 
 
