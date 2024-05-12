@@ -17,7 +17,7 @@ const Services = (props) => {
     // let [services, setServices] = useState([])
     // let [success, setSuccess] = useState(false)
 
-    let { services } = props
+    let { services } = props // destructuring of props is done in another line after first sending the props in Service function
 
     // useEffect(() => {
     //     Aos.init()

@@ -2,28 +2,55 @@
 import Aos from 'aos'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { getProjectDetails } from '../api/projectAPI'
+import { getProjectDetails, viewProject } from '../api/projectAPI'
 const API = "https://api.indexithub.com/api"
 
-const projectDetail = () => {
-    let [project, setProject] = useState({})
-    const params = useParams()
-    const id = params?.projectId
+export async function getStaticPaths(){
+    // let res = await viewProject()
+    // let project  = await res.json()
+    let res = await viewProject()
+    // console.log("res:",res)
 
-    useEffect(()=>{
-        Aos.init()
-        getProjectDetails(id)
-        .then(data => {
-            if(data?.error){
-                console.log(data.error)
-            }   
-            else{
-                setProject(data)
-                console.log(data)
-            }
-        })
-    },[id])
+    let paths = res.map(project => {
+        return { params : {projectId : project._id} }
+        // console.log(projects)
+    })
+
+    return {
+        paths,
+        fallback: false 
+    }
+}
+
+export async function getStaticProps({params}){
+    const {projectId} = params
+    const project = await getProjectDetails(projectId)
+    console.log("project: ",project)
+
+    return {props: {project}}
+}
+
+
+const projectDetail = ({project}) => {
+    // let [project, setProject] = useState({})
+    // const params = useParams()
+    // const id = params?.projectId
+
+    // useEffect(()=>{
+    //     Aos.init()
+    //     getProjectDetails(id)
+    //     .then(data => {
+    //         if(data?.error){
+    //             console.log(data.error)
+    //         }   
+    //         else{
+    //             setProject(data)
+    //             console.log(data)
+    //         }
+    //     })
+    // },[id])
     
+    console.log("PROJECT =" ,project)
 
   return (
     <>

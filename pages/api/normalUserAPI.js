@@ -1,4 +1,3 @@
-// import {API} from '../config'
 const API = "https://api.indexithub.com/api"
 
 //send message

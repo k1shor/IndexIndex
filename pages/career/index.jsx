@@ -7,15 +7,20 @@ import { useEffect } from 'react';
 import { view_career } from '../api/careerAPI';
 import Link from 'next/link';
 
+export async function getStaticProps() {
+    const careers = await view_career()
 
-const career = () => {
-    let [careers, setCareers] = useState([])
+    return {props: {careers}}
+}
 
-    useEffect(() => {
-        Aos.init()
-        view_career()
-            .then(data => setCareers(data))
-    }, [])
+const career = ({careers}) => {
+    // let [careers, setCareers] = useState([])
+
+    // useEffect(() => {
+    //     Aos.init()
+    //     view_career()
+    //         .then(data => setCareers(data))
+    // }, [])
     
     return (
         <div className='text-[#13294b] lfooter'>

@@ -1,4 +1,5 @@
 const API = "https://api.indexithub.com/api"
+// const API = "http://localhost:8000/api"
 
 //to add project
 export const addProject = (project, token) => {

@@ -1,4 +1,5 @@
 const API = "https://api.indexithub.com/api"
+// const API = "http://localhost:8000/api"
 
 export const addCategory = (category, token) =>{
     console.log(token)
@@ -16,7 +17,7 @@ export const addCategory = (category, token) =>{
 
 //to view all 
 export const getAllCategories = () =>{
-    let API = "http://localhost:8000/api"
+    // let API = "http://localhost:8000/api"
     return fetch(`${API}/category/view_category`)
     .then(res=>res.json())
     .catch(err=>console.log(err))

@@ -1,5 +1,5 @@
 const API = "https://api.indexithub.com/api"
-
+// const API = "http://localhost:8000/api"
 
 //add career
 export const addCareer = (career, token)=> {
@@ -15,7 +15,6 @@ export const addCareer = (career, token)=> {
     .catch(err=>console.log(err))
 } 
 
-
 //view
 export const view_career = () => {
     return fetch(`${API}/career/view_career`)
@@ -23,15 +22,12 @@ export const view_career = () => {
     .catch(err=>console.log(err))
 }
 
-
-
 //to get career details
 export const getCareerDetails = (id) =>{
     return fetch(`${API}/career/view_careerdetailsbyid/${id}`)
     .then(res=>res.json())
     .catch(err=>console.log(err))
 }
-
 
 //to update career
 export const updateCareer = (id, career_title, token) =>{
