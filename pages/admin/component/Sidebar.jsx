@@ -14,7 +14,7 @@ const sidebarItems = [
     {
         name: "Dashboard",
         href: "/admin",
-        icon: BiSolidDashboard
+        icon: BiSolidDashboard,
     },
     {
         name: "Project",

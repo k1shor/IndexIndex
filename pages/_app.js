@@ -7,7 +7,6 @@ import { isAuthenticated } from "./api/userApi";
 import { useEffect, useState } from "react";
 // import Sidebar from "./admin/component/Sidebar";
 import NavbarAdmin from "./admin/component/Navbar";
-// import Sidebar from "./admin/component/Sidebar";
 import { useParams } from "next/navigation";
 import AdminSidebar from "./admin/component/AdminSidebar";
 
@@ -44,7 +43,7 @@ export default function App({ Component, pageProps }) {
         <NavbarAdmin isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="flex bg-blue-200" >
           <div className="w-1/4">
-            {/* <AdminSidebar isMenuOpen={isMenuOpen} /> */}
+            {/* <Sidebar isMenuOpen={isMenuOpen} /> */}
             <AdminSidebar isMenuOpen={isMenuOpen} />
           </div>
           <div className={`transition-all duration-300 ease-in-out me-14 mt-14 ${isMenuOpen ? `md:w-5/6 w-10/12  ` : `md:w-11/12 w-10/12 `}`}>
