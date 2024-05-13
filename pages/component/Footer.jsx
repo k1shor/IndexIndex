@@ -1,14 +1,83 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
+import React, { useState } from 'react'
 import { FaChevronRight, FaMapMarkerAlt, FaPhoneAlt} from 'react-icons/fa'
 import { IoIosMail, IoLogoFacebook, IoLogoInstagram, IoLogoTwitter, IoLogoLinkedin } from "react-icons/io";
-
-
+import { sendEmail } from '../api/normalUserAPI';
+import Swal from 'sweetalert2';
 
 const Footer = () => {
+  let [email, setEmail] = useState("")
+  let [error, setError] = useState('')
+  let [success, setSuccess] = useState(false)
+
+  const handleChange = (event) => {
+    setEmail(
+      event.target.value
+    )
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+      {
+        setError("Invalid Email")
+      }
+      else {
+        sendEmail(email)
+        .then(data => {
+          if (data.error) {
+            setSuccess(false)
+            setError(data.error)
+          }
+          else {
+            setError('')
+            setSuccess(true)
+            setEmail("")
+          }
+        })
+        .catch(error => console.log(error))
+      }
+  }
+
+  const showError = () => {
+    if (error) {
+        Swal.fire({
+            icon: "error",
+            toast: true,
+            title: "error",
+            text: error,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            color: "#d33"
+        })
+        setError('')
+        return <div>{error}</div>
+    }
+}
+const showSuccess = () => {
+    if (success) {
+        Swal.fire({
+            icon: "success",
+            toast: true,
+            title: "success",
+            text: 'Thank you for your Interest',
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            color: "#64DD17"
+        })
+        setSuccess('')
+        return <div>{success}</div>
+    }
+}
   return (
     <footer>
+      {showSuccess()}
+      {showError()}
       <div className='bg-[#5ce1e6] text-white'>
         <div className='max-w-7xl mx-auto p-12'>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2'>
@@ -61,9 +130,9 @@ const Footer = () => {
             <div className='p-4'>
               <h1 className='mb-3 text-xl'>Subscribe to our newsletter</h1>
               <p className='mb-2'>Monthly digest of what's new and exciting from us.</p>
-              <form className='flex flex-row flex-wrap gap-1'>
-                <input type="text" placeholder='Email address' className='text-white w-2/3 text-center  ' />
-                <button className='p-1 rounded-md hover:text-white bg-[#007fae] hover:bg-[#13294b]'>Subscribe</button>
+              <form className='flex flex-wrap gap-1'>
+                <input type="text" placeholder='Email address' value={email} className='text-white w-3/5 text-center mb-0 ' onChange={handleChange}/>
+                <button className='rounded-md hover:text-white bg-[#007fae] hover:bg-[#13294b] px-2 py-2' onClick={handleSubmit}>Subscribe</button>
               </form>
             </div>
           </div>

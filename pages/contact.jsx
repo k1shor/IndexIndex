@@ -1,16 +1,129 @@
 'use client';
 
-import React from 'react'
+import React, { useState } from 'react'
 import Aos from "aos";
 import 'aos/dist/aos.css'
 import { useEffect } from "react";
+import { sendMessage } from './api/normalUserAPI';
+import Swal from 'sweetalert2';
 
 const contact = () => {
+  let [formData, setFormData] = useState({})
+  let [error, setError] = useState('')
+  let [success, setSuccess] = useState(false)
+
+  let {name, email, message} = formData
+
   useEffect(() => {
     Aos.init()
   }, [])
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // validation 
+    if(!name){
+      setError("Please fill in your name.")
+      // return; // Return early if validation fails
+    }
+    else if(name.length < 2){
+      setError("Name should be more than 2 characters.")
+      // return; // Return early if validation fails
+    }
+
+    else if(!email){
+      setError("Please fill in your email.")
+      // return; // Return early if validation fails
+    }
+    else if(!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+    {
+      setError("Invalid Email")
+      // return; // Return early if validation fails
+    }
+    
+    else if(!message){
+      setError("Please fill in your message.")
+      // return; // Return early if validation fails
+    }
+    else if(message.length < 10){
+      setError("Message should be more than 10 characters.")
+      // return; // Return early if validation fails
+    }
+
+    // if (!formData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+    // {
+    //   setError("Invalid Email")
+      
+    // }
+      else {
+
+        sendMessage(formData)
+          .then(data => {
+            if (data.error) {
+              setSuccess(false)
+              console.log(data.error)
+              setError(data.error)
+            }
+            else {
+              setError('')
+              setSuccess(true)
+              setFormData({
+                name: "",
+                email: "",
+                message: ""
+              })
+            }
+          })
+          .catch(error => console.log(error))
+      }
+  }
+
+  const showError = () => {
+    if (error) {
+        Swal.fire({
+            icon: "error",
+            toast: true,
+            title: "error",
+            text: error,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            color: "#d33"
+        })
+        setError('')
+        return <div>{error}</div>
+    }
+}
+const showSuccess = () => {
+    if (success) {
+        Swal.fire({
+            icon: "success",
+            toast: true,
+            title: "success",
+            text: 'Thank you for Interest',
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            color: "#64DD17"
+        })
+        setSuccess('')
+        return <div>{success}</div>
+    }
+}
+
   return (
     <div className='text-[#13294b] lfooter'>
+      {showSuccess()}
+      {showError()}
       <div className='contact-img text-center p-16'>
         <div className='career lg:text-4xl text-2xl font-bold text-[#13294b]' data-aos="zoom-in" data-aos-duration="2000" >Contact Us</div>
         <div className='flex justify-center p-3 text-[#13294b] bg-[#ffffff50]' data-aos="fade-up" data-aos-duration="2000">
@@ -40,17 +153,17 @@ const contact = () => {
           <p className="leading-relaxed mb-5 text-center">Contact For Any Query</p>
           <div className="relative mb-4">
             <label htmlFor="name" className="leading-7 text-sm">Name</label>
-            <input type="text" id="name" name="name" className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+            <input type="text" id="name" name="name" value={name} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange}/>
           </div>
           <div className="relative mb-4">
             <label htmlFor="email" className="leading-7 text-sm">Email</label>
-            <input type="email" id="email" name="email" className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+            <input type="email" id="email" name="email" value={email} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" onChange={handleChange}/>
           </div>
           <div className="relative mb-4">
             <label htmlFor="message" className="leading-7 text-sm">Message</label>
-            <textarea id="message" name="message" className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+            <textarea id="message" name="message" value={message} className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" onChange={handleChange}></textarea>
           </div>
-          <button className="text-white bg-[#007fae] border-0 py-2 px-6 focus:outline-none hover:bg-[#13294b] rounded text-lg">Send Message</button>
+          <button className="text-white bg-[#007fae] border-0 py-2 px-6 focus:outline-none hover:bg-[#13294b] rounded text-lg" onClick={handleSubmit}>Send Message</button>
         </div>
       </div>
     </div>

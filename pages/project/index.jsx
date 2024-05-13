@@ -9,34 +9,49 @@ import { viewProject } from "../api/projectAPI";
 
 const API = "https://api.indexithub.com/api"
 
-const project = () => {
-    let [cat, setCat] = useState([])
-    let [projects, setProjects] = useState([])
-    let [filteredResult, setFilteredResult] = useState([])
-    let [filter, setFilter] = useState('')
+export async function getStaticProps(){
+    const projects = await viewProject()
+    // console.log("projects: ",projects)
+    const categories = await getAllCategories()
+    // console.log("categories: ",categories)
 
-    useEffect(() => {
-        Aos.init()
-        getAllCategories()
-            .then(data => setCat(data))
-        viewProject()
-            .then(data => {
-                console.log(data)
-                setFilteredResult(data)
-                setProjects(data)})
-    }, [])
+    return {props: {projects,categories}}
+}
+
+const project = ({projects, categories}) => { 
+    // console.log(projects)
+    // console.log(categories)
+
+    // let [cat, setCat] = useState([])
+    // let [projects, setProjects] = useState([])
+
+    let [filteredResult, setFilteredResult] = useState(projects)
+    let [bgcolor, setBgColor] = useState('')
+    // Aos.init()
+
+    // useEffect(() => {
+    //     Aos.init()
+    //     getAllCategories()
+    //         .then(data => setCat(data))
+    //     viewProject()
+    //         .then(data => {
+    //             console.log(data)
+    //             setFilteredResult(data)
+    //             setProjects(data)})
+    // }, [])
 
     const handleFilter = (id) => {
         console.log(id, filteredResult)
-        setFilter(id)
-        if(id=== 'all'){
+        // setFilter(id)
+        if(id === 'all'){
             setFilteredResult(projects)
+            setBgColor('all')
         }
         else{
             setFilteredResult(
                 projects.filter(proj=>proj.category?._id === id)
             )
-
+            setBgColor(id)
         }
     }
     return (
@@ -52,21 +67,19 @@ const project = () => {
                 <div className='w-full' data-aos="fade-up" data-aos-duration="2000">
                     <div className='relative text-center font-bold'>
                         <div className='flex justify-center'>
-                            <CgPathTrim size={35} className='text-[#5ce1e6] pb-3 pt-1' />
-                            <h1>Our Project</h1>
+                            {/* <h1>Our Project</h1> */}
+                            <CgPathTrim size={27} className='text-[#5ce1e6] pt-1' />
+                            <h1 className='text-2xl'>Recently Launched Projects</h1>
                         </div>
-                        <h1 className='text-2xl'>Recently Launched Projects</h1>
                     </div>
 
                     <div className="m-10">
                         <ul className='flex md:flex-row flex-col justify-center text-sm'>
-                            <li className='hover:bg-[#5ce1e6]  hover:text-white py-2 px-4 rounded-l-full' onClick={()=>handleFilter('all')}>All</li>
-
+                            <li className={`py-2 px-4 rounded-l-full text-base ${bgcolor === 'all' || bgcolor === ''  ? 'bg-[#5ce1e6] text-white':'hover:bg-[#5ce1e6] hover:text-white'}`} onClick={()=>handleFilter('all')}>All</li>
                             {
-                                cat?.length > 0 &&
-                                cat.map(c => {
-
-                                    return <li className='hover:bg-[#5ce1e6]  hover:text-white  py-2 px-4 hover:cursor-pointer capitalize'
+                                categories?.length > 0 &&
+                                categories.map(c => {
+                                    return <li className= {`py-2 px-4 capitalize text-base ${bgcolor === c._id ? 'bg-[#5ce1e6] text-white': 'hover:bg-[#5ce1e6] hover:text-white  hover:cursor-pointer'} `}
                                         onClick={()=>handleFilter(c._id)}>
                                         {c.category_title}</li>
                                 })

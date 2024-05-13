@@ -31,7 +31,7 @@ export default function Home() {
     
     // recent job posts
     view_career().then((data) => {
-      if (data.error) {
+      if (data?.error) {
         console.log(error);
       } else {
         setCareers(data);
@@ -39,7 +39,7 @@ export default function Home() {
     });
     // view projects
     viewProject().then((data) => {
-      if (data.error) {
+      if (data?.error) {
         console.log(error);
       } else {
         setProjects(data);
@@ -48,7 +48,7 @@ export default function Home() {
     // view applied persons
     if(token){
       getAppliedCareer(token).then((data) => {
-        if (data.error) {
+        if (data?.error) {
           console.log(data.error);
         } else {
           setApplicants(data);

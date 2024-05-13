@@ -12,6 +12,8 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 import dynamic from 'next/dynamic';
 import { getAllCategories } from "./api/categoryAPI";
 import { alluserclient } from "./api/userApi";
+import { sendEmail } from "./api/normalUserAPI";
+import Swal from "sweetalert2";
 const OwlCarousel = dynamic(() => import('react-owl-carousel'), {
   ssr: false,
 });
@@ -22,6 +24,10 @@ const API = "https://api.indexithub.com/api"
 export default function Home() {
   let [users, setUsers] = useState([])
   // let [services, setServices] = useState([])
+  let [email, setEmail] = useState("")
+  let [error, setError] = useState('')
+  let [success, setSuccess] = useState(false)
+  
   const services = [
     {
         title: "Expertise and Experience",
@@ -96,10 +102,77 @@ export default function Home() {
     //   })
   }, [])
 
+  const handleChange = (event) => {
+    setEmail(
+      event.target.value
+    )
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/))
+      {
+        setError("Invalid Email")
+      }
+      else {
+        sendEmail(email)
+        .then(data => {
+          if (data.error) {
+            setSuccess(false)
+            setError(data.error)
+          }
+          else {
+            setError('')
+            setSuccess(true)
+            setEmail("")
+          }
+        })
+        .catch(error => console.log(error))
+      }
+  }
+
+  const showError = () => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        toast: true,
+        title: "error",
+        text: error,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        color: "#d33"
+      })
+      setError('')
+      return <div>{error}</div>
+    }
+  }
+  const showSuccess = () => {
+    if (success) {
+      Swal.fire({
+        icon: "success",
+        toast: true,
+        title: "success",
+        text: 'Thank you for your Interest',
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        color: "#64DD17"
+      })
+      setSuccess('')
+      return <div>{success}</div>
+    }
+  }
+
 
   return (
 
     <div>
+      {showSuccess()}
+      {showError()}
+
       <div className="main  bg-white ">
         <div className="bg-white w-11/12 mx-auto flex flex-col lg:flex-row py-10 " >
           <div className="mx-auto lg:w-1/2 lg:text-xl  md:text-base md:w-5/6 p-3 w-full text-sm text-[#13294b]" data-aos="zoom-in" data-aos-duration="1000">
@@ -153,13 +226,15 @@ export default function Home() {
         {/* third content start */}
 
         <div className="bg footer text-[#13294b] ">
-          <div className="bg-[#00000088] text-white md:p-14 p-3">
+          <div className="bg-[#00000088] text-white md:px-14 md:py-14 sm:px-9 py-9 px-3 ">
 
             <h1 className="md:text-4xl md:font-bold text-2xl font-semibold text-white">Ready to get started</h1>
             <p className="m-1">Enter you email address</p>
-            <input type="email" id="email" name="email" placeholder="enter your email..." className="text-[#13294b] md:w-4/5 w-4/5 h-5 font-2xl rounded-md p-5 bg-[#e1e1e1]" />
-            <div className="flex justify-start">
-              <button className="bg-[#007fae] h-9 text-lg rounded-md cursor-pointer mt-4 w-28 hover:bg-[#13294b]  flex items-center justify-center"><a href="">Subscribe</a></button>
+            <div className="flex pt-2 w-full ">
+              <input type="email" id="email" name="email" value={email} placeholder="Enter your email..." className="text-[#13294b] lg:w-1/2 sm:w-3/5 w-4/5  h-5 font-2xl rounded-md p-5 bg-[#e1e1e1]" onChange={handleChange} />
+              <div className="ps-1">
+                <button className="bg-[#007fae] h-9 md:text-lg text-base rounded-md cursor-pointer  hover:bg-[#13294b] flex items-center justify-center py-5 px-3" onClick={handleSubmit}><a href="">Subscribe</a></button>
+              </div>
             </div>
           </div>
 
@@ -172,7 +247,7 @@ export default function Home() {
 
         <div className="rfooter md:py-10">
 
-          <h1 className="md:text-5xl text-3xl text-center font-bold p-10" data-aos="fade-up" data-aos-duration="2000">Why Index IT Hub?</h1>
+          <h1 className="lg:text-4xl text-3xl text-center font-bold p-10" data-aos="fade-up" data-aos-duration="2000">Why Index IT Hub?</h1>
 
           <div className="md:p-10">
             <div className="flex flex-wrap w-full justify-evenly">
@@ -209,8 +284,8 @@ export default function Home() {
 
         <div className="lfooter">
           <div className="text-center md:p-12 p-10" data-aos="fade-up" data-aos-duration="2000">
-            <h3 className="md:text-2xl text-xl ">Our Clients</h3>
-            <h4 className="md:text-3xl text-2xl p-5 font-bold">Some of our happy Clients</h4>
+            <h3 className="lg:text-4xl text-3xl font-bold ">Our Clients</h3>
+            <h4 className="md:text-2xl text-xl p-5 ">Some of our happy Clients</h4>
             {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae veniam nesciunt, ducimus
               praesentium placeat debitis? Lorem ipsum dolor sit amet consectetur adipisicing elit.</p> */}
 

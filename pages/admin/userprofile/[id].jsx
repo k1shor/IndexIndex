@@ -8,7 +8,7 @@ import Swal from 'sweetalert2'
 const API = "https://api.indexithub.com/api"
 
 const Profile = () => {
-    // let router = useRouter()
+    let router = useRouter()
 
     const [activeSection, setActiveSection] = useState('overview')
     const [user, setUser] = useState({
@@ -48,10 +48,12 @@ const Profile = () => {
         getToken()
             .then(data =>
                 setToken(data)
+        
             )
 
         async function getToken() {
-            token = await localStorage.getItem("token")
+            // token = await localStorage.getItem("token")
+            token = await localStorage.getItem("token")  ? localStorage.getItem("token") : router.push('/login') 
             return token
         }
         userDetail(id, token)
@@ -164,9 +166,9 @@ const Profile = () => {
                             <div className='mb-5'>Username:
                                 <h1 className='font-medium'>{user.username}</h1>
                             </div>
-                            <h1 className='mb-5'>Position:
+                            <div className='mb-5'>Position:
                                 <h1 className='capitalize font-medium'>{user.position}</h1>
-                            </h1>
+                            </div>
                             <div className='mb-5'>Age:
                                 <h1 className='font-medium'>{user.age}</h1>
                             </div>
@@ -320,40 +322,52 @@ const Profile = () => {
 
     return (
         <>
-            <div className='ms-8 md:w-5/6 w-11/12 mb-5' style={{ minHeight: "83.7vh" }}>
-                <div className='bg-white p-2 rounded-lg lg:ms-0 '>
-                    <div className='lg:flex lg:justify-between text-xs lg:text-lg lg:columns-2 columns-1'>
-                        <h1>Profile</h1>
-                        <ol className='flex'>
-                            <li>
-                                <Link href={'#'}>Dashboard</Link>
-                            </li>
-                            <li className='mr-2 ml-2'>/</li>
-                            <li>User Profile</li>
-                        </ol>
-                    </div>
-                </div>
+            {
+                token ? 
+                <>
+                    <>
+                        <div className='ms-8 md:w-5/6 w-11/12 mb-5' style={{ minHeight: "83.7vh" }}>
+                            <div className='bg-white p-2 rounded-lg lg:ms-0 '>
+                                <div className='lg:flex lg:justify-between text-xs lg:text-lg lg:columns-2 columns-1'>
+                                    <h1>Profile</h1>
+                                    <ol className='flex'>
+                                        <li>
+                                            <Link href={'#'}>Dashboard</Link>
+                                        </li>
+                                        <li className='mr-2 ml-2'>/</li>
+                                        <li>User Profile</li>
+                                    </ol>
+                                </div>
+                            </div>
 
-                <div className='md:flex mt-5 '>
-                    <div className='mb-2 '>
-                        <div className='flex flex-col justify-center items-center p-5 ms-0 lg:ms-5 bg-white rounded-lg font-bold'>
-                            <img src={`${API}/${user.image}`} alt={user.image} className='h-56 rounded-md' />
-                            <h1 className='mb-1 mt-2 capitalize'>{user.firstname} {user.lastname}</h1>
-                            <h1 className='capitalize'>{user.position}</h1>
+                            <div className='md:flex mt-5 '>
+                                <div className='mb-2 '>
+                                    <div className='flex flex-col justify-center items-center p-5 ms-0 lg:ms-5 bg-white rounded-lg font-bold'>
+                                        <img src={`${API}/${user.image}`} alt={user.image} className='h-56 rounded-md' />
+                                        <h1 className='mb-1 mt-2 capitalize'>{user.firstname} {user.lastname}</h1>
+                                        <h1 className='capitalize'>{user.position}</h1>
+                                    </div>
+                                </div>
+                                <div className='bg-white ms-0 lg:ms-8 p-5 rounded-xl lg:w-9/12 text-xs md:text-md lg:text-lg'>
+                                    <div className='columns-1 lg:columns-2 border-b border-dashed border-b-gray-700 pb-2'>
+                                        <h1 className='hover:text-blue-600 hover:underline hover:underline-offset-2' onClick={() => handleSectionChange('overview')}>Overview</h1>
+                                        <h1 className='hover:text-blue-600 hover:underline hover:underline-offset-2' onClick={() => handleSectionChange('editprofile')}>Edit Profile</h1>
+                                    </div>
+                                    {sectionContent}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className='bg-white ms-0 lg:ms-8 p-5 rounded-xl lg:w-9/12 text-xs md:text-md lg:text-lg'>
-                        <div className='columns-1 lg:columns-2 border-b border-dashed border-b-gray-700 pb-2'>
-                            <h1 className='hover:text-blue-600 hover:underline hover:underline-offset-2' onClick={() => handleSectionChange('overview')}>Overview</h1>
-                            <h1 className='hover:text-blue-600 hover:underline hover:underline-offset-2' onClick={() => handleSectionChange('editprofile')}>Edit Profile</h1>
-                        </div>
-                        {sectionContent}
-                    </div>
-                </div>
-            </div>
 
 
 
+                    </>
+                </>
+                :
+                <>
+                    LOADING...
+                </>
+
+            }
         </>
     )
 }

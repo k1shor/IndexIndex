@@ -7,15 +7,20 @@ import { useEffect } from 'react';
 import { view_career } from '../api/careerAPI';
 import Link from 'next/link';
 
+export async function getStaticProps() {
+    const careers = await view_career()
 
-const career = () => {
-    let [careers, setCareers] = useState([])
+    return {props: {careers}}
+}
 
-    useEffect(() => {
-        Aos.init()
-        view_career()
-            .then(data => setCareers(data))
-    }, [])
+const career = ({careers}) => {
+    // let [careers, setCareers] = useState([])
+
+    // useEffect(() => {
+    //     Aos.init()
+    //     view_career()
+    //         .then(data => setCareers(data))
+    // }, [])
     
     return (
         <div className='text-[#13294b] lfooter'>
@@ -48,10 +53,10 @@ const career = () => {
             <div className='rfooter p-10'>
                 <div className='text-center' data-aos="fade-up" data-aos-duration="2000">
                     <div className='flex justify-center'>
-                        <CgPathTrim className='m-1 text-[#5ce1e6] md:size-6' />
-                        <p className='font-semibold'>Our Job vacancies</p>
+                        <CgPathTrim size={27} className='text-[#5ce1e6]' />
+                        {/* <p className='font-semibold'>Our Job vacancies</p> */}
+                        <h2 className='md:text-3xl text-2xl font-bold '>Our Latest Job Vacancy</h2>
                     </div>
-                    <h2 className='md:text-3xl text-2xl font-bold pt-3'>Our Latest Job Vacancy</h2>
                 </div>
                 <div className='flex flex-wrap justify-evenly'>
                     {

@@ -2,11 +2,35 @@
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react'
 import Swal from 'sweetalert2';
-import { getCareerDetails } from '../api/careerAPI';
+import { getCareerDetails, view_career } from '../api/careerAPI';
 import { applyCareer } from '../api/applyCareerAPI';
+import career from '.';
 
-const ApplyCareer = () => {
-    const [careers, setCareers] = useState({})
+export async function getStaticPaths(){
+    let res = await view_career()
+    // console.log("res:",res)
+
+    let paths = res.map(careers => {
+        return { params : {applycareer : careers._id} }
+    })
+
+    return {
+        paths,
+        fallback: false
+    }
+
+}
+
+export async function getStaticProps({params}){
+    const {applycareer} = params
+    const careers = await getCareerDetails(applycareer)
+    // console.log('careers: ',careers)
+
+    return { props: {careers}}
+}
+
+const ApplyCareer = ({careers}) => {
+    // const [careers, setCareers] = useState({})
     const [formData, setFormData] = useState({
         first_name: "",
         last_name: "",
@@ -23,21 +47,21 @@ const ApplyCareer = () => {
     let [error, setError] = useState('')
     let [success, setSuccess] = useState(false)
 
-    const params = useParams()
-    const id = params?.applycareer
+    // const params = useParams()
+    // const id = params?.applycareer
 
-    useEffect(() => {
-        getCareerDetails(id)
-            .then(data => {
-                if (data?.error) {
-                    console.log(data.error)
-                }
-                else {
-                    console.log(data)
-                    setCareers(data)
-                }
-            })
-    }, [id])
+    // useEffect(() => {
+    //     getCareerDetails(id)
+    //         .then(data => {
+    //             if (data?.error) {
+    //                 console.log(data.error)
+    //             }
+    //             else {
+    //                 console.log(data)
+    //                 setCareers(data)
+    //             }
+    //         })
+    // }, [id])
 
 
     let file_ref = useRef()
@@ -61,7 +85,7 @@ const ApplyCareer = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        formdata.set('career', id)
+        formdata.set('career', careers._id)
         applyCareer(formdata)
             .then(data => {
                 if (data.error) {
@@ -129,7 +153,7 @@ const ApplyCareer = () => {
             {showError()}
             {showSuccess()}
             <div className='flex justify-center text-[#13294b] lfooter'>
-                <form action="" className='my-10 rounded-3xl shadow-2xl md:w-7/12 w-11/12 card-hover p-5' onSubmit={handleSubmit}>
+                <form action="" className='my-10 rounded-3xl shadow-2xl md:w-6/12 sm:w-8/12 w-11/12 card-hover p-5' onSubmit={handleSubmit}>
                     <div className=' pb-8 mt-5 '>
                         <h1 className='text-2xl font-bold text-center capitalize'>Apply Here for "{careers?.career_title}"</h1>
 
